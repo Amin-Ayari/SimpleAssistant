@@ -1,0 +1,8 @@
+sentence-transformers
+numpy 
+yt-dlp
+keyboard
+pygetwindow
+winotify
+asyncio
+winsdk
