@@ -1,8 +1,8 @@
 from intentClassifier import *
-from intents.NotesIntent import NotesIntent
-from intents.MusicIntent import MusicIntent
-from intents.AppsIntent import AppIntent
-from intents.SearchIntent import SearchIntent
+import intents.NotesIntent as NotesIntent
+import intents.MusicIntent as MusicIntent
+import intents.AppsIntent as AppIntent
+import intents.SearchIntent as SearchIntent
 
 intents = load_intents()
 embedded_intents = embed_intents(intents)

@@ -1,6 +1,6 @@
 {
     "general": {
-        "music":  "The user wants to control music or audio playback",
+        "music":  "The user wants to control music or audio playback or edit volume settings actions such as mute, unmute, play, skip...",
         "notes":  "The user wants to read, write, or manage personal notes",
         "app":    "The user wants to open or close an application on their computer",
         "search": "The user wants to search for something on the internet",

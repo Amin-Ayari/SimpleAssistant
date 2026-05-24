@@ -5,6 +5,12 @@ import keyboard
 import pygetwindow as gw
 import asyncio
 from winsdk.windows.media.control import GlobalSystemMediaTransportControlsSessionManager as MediaManager
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+from pycaw.pycaw import AudioUtilities
+
+
+
 
 async def _get_status():
     sessions = await MediaManager.request_async()
@@ -29,7 +35,10 @@ def play(query: str):
 
 
 def play_pause():
-    keyboard.send("play/pause media")
+    windows = gw.getWindowsWithTitle("YouTube")
+    if windows:
+        windows[0].activate()
+        keyboard.send("play/pause media")
 
 def skip_track():
     keyboard.send("next track")
@@ -39,8 +48,13 @@ def previous_track():
 
 def mute():
     keyboard.send("volume mute")
-def unmute():
-    keyboard.send("volume unmute")
+
+def is_muted():
+
+    device = AudioUtilities.GetSpeakers()
+    volume = device.EndpointVolume
+    return volume.GetMute() == 1
+
 
 
 def loop():
@@ -52,19 +66,27 @@ def loop():
 
 def handle(user_input: str, intent_group: dict):
     intent_name = classify(user_input, intent_group)
-
+    user_input = user_input.lower()
+    clean_input = user_input
+    for prefix in ["play ", "put on ", "queue ", "stream ", "turn on "]:
+        if clean_input.startswith(prefix):
+            clean_input = clean_input[len(prefix):]
+            break
+    clean_input = clean_input.strip()   
     if intent_name == "play":
-        if is_playing() == "paused":
-            play_pause()
+        if clean_input == "":
+            if is_playing() == "paused":
+                play_pause()
         else:           
-            play(user_input)
+            play(clean_input)
     elif intent_name == "stop":
         if is_playing() == "playing":
             play_pause()
-    elif intent_name == "mute":
-        mute()
-    elif intent_name == "unmute":
-        unmute()
+    elif intent_name == "mute" or intent_name == "unmute":
+        if intent_name == "mute" and not is_muted():
+            mute()
+        elif intent_name == "unmute" and is_muted():
+            mute()
     elif intent_name == "resume":
         if is_playing() == "paused":
             play_pause()
